@@ -1,5 +1,5 @@
 resource "aws_instance" "consul" {
-  ami                    = "ami-0dbe1fa0e50bc925e"
+  ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t3.micro"
   private_ip             = "10.0.4.100"
   subnet_id              = module.vpc.public_subnets[0]
