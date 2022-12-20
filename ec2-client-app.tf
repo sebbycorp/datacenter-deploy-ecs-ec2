@@ -18,13 +18,3 @@ resource "aws_instance" "consul-client" {
     Env  = "consul"
   }
 }
-
-resource "aws_eip" "consul" {
-  instance = aws_instance.consul.id
-  vpc      = true
-}
-
-resource "aws_eip_association" "eip_assoc" {
-  instance_id   = aws_instance.consul.id
-  allocation_id = aws_eip.consul.id
-}
