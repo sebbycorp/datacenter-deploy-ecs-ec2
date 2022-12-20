@@ -3,7 +3,7 @@ resource "aws_instance" "consul-client" {
   instance_type          = "t3.micro"
   subnet_id              = module.vpc.public_subnets[0]
   vpc_security_group_ids = [aws_security_group.consul.id]
-  user_data              = templatefile("./scripts/consul-server-init.sh", {
+  user_data              = templatefile("./scripts/consul-client-init.sh", {
     consul_datacenter = var.consul_datacenter
     consul_acl_token  = random_uuid.bootstrap_token.result
     consul_gossip_key = random_id.gossip_encryption_key.b64_std
