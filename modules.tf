@@ -2,6 +2,7 @@ module "acl_controller" {
   source     = "hashicorp/consul-ecs/aws//modules/acl-controller"
   version    = "0.2.0"
   depends_on = [aws_instance.consul]
+  launch_type = "EC2"
   log_configuration = {
     logDriver = "awslogs"
     options = {

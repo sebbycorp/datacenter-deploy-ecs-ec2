@@ -44,6 +44,11 @@ variable "suffix" {
   default     = "nosuffix"
   description = "Suffix to add to all resource names."
 }
+variable "public_ssh_key" {
+  description = "Local file path of a public ssh key. If specified, a bastion server (jump host) is created on order to login to container instances."
+  type        = string
+  default     = null
+}
 
 variable "secure" {
   description = "Whether to create all resources in a secure installation (with TLS, ACLs and gossip encryption)."
