@@ -105,6 +105,20 @@ auto_encrypt {
 ports {
   http = 8500
   https = 8501
+  grps_tls = 8502
+}
+# these are the default settings used for the proxies
+# the equivalent for services is `service-defaults` in the `kind` argument
+config_entries {
+  bootstrap = [
+    {
+      kind = "proxy-defaults"
+      name = "global"
+      config {
+        protocol                   = "http"
+      }
+    }
+  ]
 }
 EOF
 
