@@ -61,7 +61,7 @@ ${consul_ca_key}
 EOF
 
 #Create server certificates
-sudo consul tls cert create -server -ca=/etc/consul.d/consul-agent-ca.pem -key=/etc/consul.d/consul-agent-ca-key.pem -additional-ipaddress=10.0.4.100
+sudo consul tls cert create -server -ca=/etc/consul.d/consul-agent-ca.pem -key=/etc/consul.d/consul-agent-ca-key.pem -additional-ipaddress=${consul_ip}
 sudo cp dc1-server-consul-0.pem /etc/consul.d/server-consul-0.pem
 sudo cp dc1-server-consul-0-key.pem /etc/consul.d/server-consul-0-key.pem
 sudo chmod 640 /etc/consul.d/server-consul-0.pem

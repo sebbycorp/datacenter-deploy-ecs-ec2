@@ -10,6 +10,7 @@ resource "aws_instance" "consul" {
     consul_ca_cert    = tls_self_signed_cert.ca.cert_pem
     consul_ca_key     = tls_private_key.ca.private_key_pem
     consul_version    = var.consul_version
+    consul_ip = aws_instance.consul.private_ip
   })
   iam_instance_profile   = aws_iam_instance_profile.consul.name
   key_name               = var.ssh_keypair_name
