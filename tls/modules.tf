@@ -62,6 +62,7 @@ module "example_client_app" {
   tls                            = true
   consul_server_ca_cert_arn      = aws_secretsmanager_secret.ca_cert.arn
   gossip_key_secret_arn          = aws_secretsmanager_secret.gossip_key.arn
+  consul_https_ca_cert_arn     = aws_secretsmanager_secret.ca_cert.arn
   acls                           = true
   consul_datacenter              = var.consul_datacenter
   consul_http_addr        = "https://${aws_instance.consul.private_ip}:8501"
@@ -92,6 +93,7 @@ module "example_server_app" {
   consul_server_ca_cert_arn      = aws_secretsmanager_secret.ca_cert.arn
   gossip_key_secret_arn          = aws_secretsmanager_secret.gossip_key.arn
   acls                           = true
+  consul_https_ca_cert_arn     = aws_secretsmanager_secret.ca_cert.arn
   consul_datacenter              = var.consul_datacenter
   consul_http_addr        = "https://${aws_instance.consul.private_ip}:8501"
   depends_on = [module.acl_controller]
