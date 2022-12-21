@@ -1,6 +1,7 @@
 resource "aws_instance" "consul" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t3.micro"
+  private_ip             = "10.0.1.100"
   subnet_id              = module.vpc.private_subnets[0]
   vpc_security_group_ids = [aws_security_group.consul.id]
   user_data              = templatefile("./scripts/consul-server-init.sh", {
@@ -12,7 +13,7 @@ resource "aws_instance" "consul" {
     consul_version    = var.consul_version
   })
   iam_instance_profile   = aws_iam_instance_profile.consul.name
-  key_name               = var.ssh_keypair_name
+  key_name               = aws_key_pair.webssh.key_name
   tags = {
     Name = "${var.name}-consul-server"
     Env  = "consul"
