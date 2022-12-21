@@ -9,7 +9,7 @@ resource "aws_ecs_service" "example_client_app" {
   network_configuration {
     subnets = module.vpc.private_subnets
   }
-  launch_type    = "FARGATE"
+  launch_type    = "EC2"
   propagate_tags = "TASK_DEFINITION"
   load_balancer {
     target_group_arn = aws_lb_target_group.example_client_app.arn
@@ -29,7 +29,7 @@ resource "aws_ecs_service" "example_server_app" {
   network_configuration {
     subnets = module.vpc.private_subnets
   }
-  launch_type            = "FARGATE"
+  launch_type            = "EC2"
   propagate_tags         = "TASK_DEFINITION"
   enable_execute_command = true
 }

@@ -1,28 +1,28 @@
-resource "aws_iam_role" "instance_role" {
-  name = "${var.name}-consul-ecs-instance-role"
+# resource "aws_iam_role" "instance_role" {
+#   name = "${var.name}-consul-ecs-instance-role"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        }
-      },
-    ]
-  })
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+#       {
+#         Action = "sts:AssumeRole"
+#         Effect = "Allow"
+#         Principal = {
+#           Service = "ec2.amazonaws.com"
+#         }
+#       },
+#     ]
+#   })
 
-  managed_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
-  ]
-}
+#   managed_policy_arns = [
+#     "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+#   ]
+# }
 
-resource "aws_iam_instance_profile" "instance_profile" {
-  name = "${var.name}-consul-ecs-instance-profile"
-  role = aws_iam_role.instance_role.name
-}
+# resource "aws_iam_instance_profile" "instance_profile" {
+#   name = "${var.name}-consul-ecs-instance-profile"
+#   role = aws_iam_role.instance_role.name
+# }
 
 resource "aws_iam_role" "consul" {
   name = "consul-role"

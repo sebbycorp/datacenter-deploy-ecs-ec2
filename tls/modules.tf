@@ -24,6 +24,8 @@ module "example_client_app" {
   source            = "hashicorp/consul-ecs/aws//modules/mesh-task"
   version           = "0.5.2"
   family            = "${var.name}-example-client-app"
+  requires_compatibilities = ["EC2"]
+  memory                   = 256
   port              = "9090"
   log_configuration = local.example_client_app_log_config
   container_definitions = [{
@@ -74,6 +76,8 @@ module "example_server_app" {
   source            = "hashicorp/consul-ecs/aws//modules/mesh-task"
   version           = "0.5.2"
   family            = "${var.name}-example-server-app"
+  requires_compatibilities = ["EC2"]
+  memory                   = 256
   port              = "9090"
   log_configuration = local.example_server_app_log_config
   container_definitions = [{
