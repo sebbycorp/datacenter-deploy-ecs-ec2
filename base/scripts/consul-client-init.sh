@@ -113,7 +113,6 @@ cat > /etc/consul.d/web.hcl <<- EOF
 service {
   name = "web"
   port = 9090
-  token = "${consul_acl_token}"
   check {
     id = "web"
     name = "HTTP Web on Port 9090"
@@ -150,7 +149,7 @@ After=syslog.target network.target
 
 # Put web service token here for the -token option!
 [Service]
-ExecStart=/usr/bin/consul connect envoy -sidecar-for=web -token=${consul_acl_token}
+ExecStart=/usr/bin/consul connect envoy -sidecar-for=web
 ExecStop=/bin/sleep 5
 Restart=always
 

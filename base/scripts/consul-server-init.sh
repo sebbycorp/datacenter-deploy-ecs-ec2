@@ -44,30 +44,6 @@ sudo touch /etc/consul.d/server.hcl
 sudo chown --recursive consul:consul /etc/consul.d
 sudo chmod 640 /etc/consul.d/server.hcl
 
-#Create CA certificate files
-sudo touch /etc/consul.d/consul-agent-ca.pem
-sudo chown --recursive consul:consul /etc/consul.d
-sudo chmod 640 /etc/consul.d/consul-agent-ca.pem
-sudo touch /etc/consul.d/consul-agent-ca-key.pem
-sudo chown --recursive consul:consul /etc/consul.d
-sudo chmod 640 /etc/consul.d/consul-agent-ca-key.pem
-
-#Populate CA certificate files
-cat << EOF > /etc/consul.d/consul-agent-ca.pem
-${consul_ca_cert}
-EOF
-cat << EOF > /etc/consul.d/consul-agent-ca-key.pem
-${consul_ca_key}
-EOF
-
-#Create server certificates
-sudo consul tls cert create -server -ca=/etc/consul.d/consul-agent-ca.pem -key=/etc/consul.d/consul-agent-ca-key.pem -additional-ipaddress=10.0.4.100
-sudo cp dc1-server-consul-0.pem /etc/consul.d/server-consul-0.pem
-sudo cp dc1-server-consul-0-key.pem /etc/consul.d/server-consul-0-key.pem
-sudo chmod 640 /etc/consul.d/server-consul-0.pem
-sudo chmod 640 /etc/consul.d/server-consul-0-key.pem
-sudo chown --recursive consul:consul /etc/consul.d
-
 
 #Create Consul config file
 cat << EOF > /etc/consul.d/server.hcl

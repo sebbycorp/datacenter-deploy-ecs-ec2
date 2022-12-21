@@ -51,21 +51,6 @@ sudo touch /etc/consul.d/server.hcl
 sudo chown --recursive consul:consul /etc/consul.d
 sudo chmod 640 /etc/consul.d/server.hcl
 
-#Create CA certificate files
-sudo touch /etc/consul.d/consul-agent-ca.pem
-sudo chown --recursive consul:consul /etc/consul.d
-sudo chmod 640 /etc/consul.d/consul-agent-ca.pem
-sudo touch /etc/consul.d/consul-agent-ca-key.pem
-sudo chown --recursive consul:consul /etc/consul.d
-sudo chmod 640 /etc/consul.d/consul-agent-ca-key.pem
-
-#Populate CA certificate files
-cat << EOF > /etc/consul.d/consul-agent-ca.pem
-${consul_ca_cert}
-EOF
-cat << EOF > /etc/consul.d/consul-agent-ca-key.pem
-${consul_ca_key}
-EOF
 
 
 #Create Consul config file
@@ -124,7 +109,6 @@ cat > /etc/consul.d/api.hcl <<- EOF
 service {
   name = "api"
   port = 9090
-  token = "${consul_acl_token}"
   check {
     id = "api"
     name = "HTTP API on Port 9090"
@@ -153,7 +137,7 @@ Description=Consul Envoy
 After=syslog.target network.target
 # Put api service token here for the -token option!
 [Service]
-ExecStart=/usr/bin/consul connect envoy -sidecar-for=api -token=${consul_acl_token}
+ExecStart=/usr/bin/consul connect envoy -sidecar-for=api
 ExecStop=/bin/sleep 5
 Restart=always
 [Install]
