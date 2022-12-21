@@ -18,6 +18,35 @@ resource "aws_security_group" "example_client_app_alb" {
   }
 }
 
+resource "aws_security_group" "fargate_client_app_alb" {
+  name   = "${var.name}-fargate-client-app-alb"
+  vpc_id = module.vpc.vpc_id
+
+  ingress {
+    description = "Access to fargate client application."
+    from_port   = 9090
+    to_port     = 9090
+    protocol    = "tcp"
+    cidr_blocks = ["${var.lb_ingress_ip}/32"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group_rule" "ingress_from_fargate_alb_to_ecs" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 65535
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.fargate_client_app_alb.id
+  security_group_id        = data.aws_security_group.vpc_default.id
+}
+
 resource "aws_security_group_rule" "ingress_from_client_alb_to_ecs" {
   type                     = "ingress"
   from_port                = 0
@@ -53,6 +82,12 @@ resource "aws_security_group" "consul" {
   ingress {
     from_port   = 8502
     to_port     = 8502
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16", "${var.lb_ingress_ip}/32"]
+  }
+  ingress {
+    from_port   = 8503
+    to_port     = 8503
     protocol    = "tcp"
     cidr_blocks = ["10.0.0.0/16", "${var.lb_ingress_ip}/32"]
   }

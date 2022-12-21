@@ -98,8 +98,7 @@ auto_encrypt {
   tls = true
 }
 ports {
-  http = 8500
-  https = 8501
+  grps_tls = 8503
 }
 
 EOF
@@ -126,7 +125,7 @@ After=syslog.target network.target
 [Service]
 Environment="MESSAGE=Hello from Web"
 Environment="NAME=web"
-Environment="UPSTREAM_URIS=http://127.0.0.1:9091"
+Environment="UPSTREAM_URIS=http://api.service.consul:9090"
 ExecStart=/usr/local/bin/fake-service
 ExecStop=/bin/sleep 5
 Restart=always

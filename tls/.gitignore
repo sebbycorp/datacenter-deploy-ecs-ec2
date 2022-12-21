@@ -9,7 +9,7 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
-
+terraform-20*
 # Crash log files
 crash.log
 
