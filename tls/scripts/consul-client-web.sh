@@ -98,7 +98,7 @@ auto_encrypt {
   tls = true
 }
 ports {
-  grps_tls = 8502
+  grps_tls = 8503
 }
 
 EOF
