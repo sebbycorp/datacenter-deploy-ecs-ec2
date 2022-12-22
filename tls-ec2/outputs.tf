@@ -15,3 +15,7 @@ output "Consul_LB_address" {
 output "acl_bootstrap_token" {
   value = random_uuid.bootstrap_token.result
 }
+
+output "client_lb_hashicups_address" {
+  value = "http://${aws_lb.hashicups.dns_name}/"
+}

@@ -21,3 +21,49 @@ locals {
     }
   }
 }
+
+
+
+locals {
+  frontend_log_config = {
+    logDriver = "awslogs"
+    options = {
+      awslogs-group         = aws_cloudwatch_log_group.log_group.name
+      awslogs-region        = var.region
+      awslogs-stream-prefix = "frontend"
+    }
+  }
+
+  public-api_log_config = {
+    logDriver = "awslogs"
+    options = {
+      awslogs-group         = aws_cloudwatch_log_group.log_group.name
+      awslogs-region        = var.region
+      awslogs-stream-prefix = "app"
+    }
+  }
+  product-api_log_config = {
+    logDriver = "awslogs"
+    options = {
+      awslogs-group         = aws_cloudwatch_log_group.log_group.name
+      awslogs-region        = var.region
+      awslogs-stream-prefix = "app"
+    }
+  }
+  product-api-db_log_config = {
+    logDriver = "awslogs"
+    options = {
+      awslogs-group         = aws_cloudwatch_log_group.log_group.name
+      awslogs-region        = var.region
+      awslogs-stream-prefix = "app"
+    }
+  }
+  payments_log_config = {
+    logDriver = "awslogs"
+    options = {
+      awslogs-group         = aws_cloudwatch_log_group.log_group.name
+      awslogs-region        = var.region
+      awslogs-stream-prefix = "app"
+    }
+  }
+}

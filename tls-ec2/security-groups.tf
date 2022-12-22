@@ -1,3 +1,6 @@
+
+
+
 resource "aws_security_group" "example_client_app_alb" {
   name   = "${var.name}-example-client-app-alb"
   vpc_id = module.vpc.vpc_id
@@ -15,6 +18,50 @@ resource "aws_security_group" "example_client_app_alb" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "hexample_client_app_alb" {
+  name   = "${var.name}-hexample-client-app-alb"
+  vpc_id = module.vpc.vpc_id
+
+  ingress {
+    description = "Access to example client application."
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0", "${var.lb_ingress_ip}/32"]
+  }
+
+  ingress {
+    description = "Access to example client application."
+    from_port   = 8081
+    to_port     = 8081
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0", "${var.lb_ingress_ip}/32"]
+  }
+
+  ingress {
+    description = "Access to example client application."
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    self        = true
+  }
+
+  ingress {
+    description = "Access to example client application."
+    from_port   = 8081
+    to_port     = 8081
+    protocol    = "tcp"
+    self        = true
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["${var.lb_ingress_ip}/32"]
   }
 }
 

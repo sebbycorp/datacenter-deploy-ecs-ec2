@@ -73,3 +73,163 @@ variable "default_tags" {
   }
 }
 
+
+# variable "hashicups_settings" {
+#   default = [
+#     {
+#       name  = "frontend"
+#       image = "hashicorpdemoapp/frontend:v1.0.3"
+#       portMappings = [
+#         {
+#           containerPort = 3000
+#           hostPort      = 3000
+#           protocol      = "http"
+#         }
+#       ],
+#       upstreams = [
+#         {
+#           destinationName = "public-api"
+#           localBindPort   = 8081
+#         }
+#       ],
+#       environment = []
+#     },
+#     {
+#       name  = "payments"
+#       image = "hashicorpdemoapp/payments:v0.0.16"
+#       portMappings = [{
+#         protocol      = "http"
+#         containerPort = 8080
+#         hostPort      = 8080
+#       }]
+#       upstreams   = []
+#       environment = []
+#     },
+#     {
+#       name  = "postgres"
+#       image = "hashicorpdemoapp/product-api-db:v0.0.21"
+#       environment = [{
+#         name  = "POSTGRES_DB"
+#         value = "products"
+#         },
+#         {
+#           name  = "POSTGRES_USER"
+#           value = "postgres"
+#         },
+#         {
+#           name  = "POSTGRES_PASSWORD"
+#           value = "password"
+#       }]
+#       portMappings = [{
+#         protocol      = "tcp"
+#         containerPort = 5432
+#         hostPort      = 5432
+#       }]
+#       upstreams = []
+#     },
+#     {
+#       name  = "product-api"
+#       image = "hashicorpdemoapp/product-api:v0.0.21"
+#       environment = [{
+#         #        name = "CONFIG_FILE",
+#         #        # Discrepancy in the repo: conf.json or config.json? Conf.json returns not found
+#         #        # Ref: https://github.com/hashicorp-demoapp/product-api-go/blob/main/docker_compose/docker-compose.yml#L8
+#         #        value = "./conf.json"
+#         ##      },
+#         #        {
+#         name  = "DB_CONNECTION"
+#         value = "host=localhost port=5432 user=postgres password=password dbname=products sslmode=disable"
+#         },
+#         {
+#           name  = "METRICS_ADDRESS"
+#           value = ":9103"
+#         },
+#         {
+#           name  = "BIND_ADDRESS"
+#           value = ":9090"
+#       }]
+#       portMappings = [{
+#         protocol      = "http"
+#         containerPort = 9090
+#         hostPort      = 9090
+#       }]
+#       upstreams = [
+#         {
+#           destinationName = "postgres"
+#           localBindPort   = 5432
+#         },
+
+#       ],
+#       volumes = []
+#     },
+#     {
+#       name  = "public-api"
+#       image = "hashicorpdemoapp/public-api:v0.0.7"
+#       environment = [{
+#         # ECS only suports container/host port equality. Since payments also uses 8080, switch this to 8081.
+#         # Ref: https://github.com/hashicorp-demoapp/public-api/blob/a576419df268b74966c4dfdb90d653f498026d6d/main.go#L30
+#         name = "BIND_ADDRESS"
+#         # We missed the colon here
+#         value = ":8081"
+#         },
+#         {
+#           name  = "PRODUCT_API_URI"
+#           value = "http://localhost:9090"
+#         },
+#         {
+#           name  = "PAYMENT_API_URI"
+#           value = "http://localhost:1800"
+#       }]
+#       portMappings = [{
+#         protocol      = "http"
+#         containerPort = 8081
+#         hostPort      = 8081
+#       }]
+#       upstreams = [{
+#         destinationName = "product-api"
+#         localBindPort   = 9090
+#       }]
+#     }
+#   ]
+# }
+
+
+# variable "target_group_settings" {
+#   default = {
+#     elb = {
+#       services = [
+#         {
+#           name                 = "frontend"
+#           service_type         = "http"
+#           protocol             = "HTTP"
+#           target_group_type    = "ip"
+#           port                 = "80"
+#           deregistration_delay = 30
+#           health = {
+#             healthy_threshold   = 2
+#             unhealthy_threshold = 2
+#             interval            = 30
+#             timeout             = 29
+#             path                = "/"
+#           }
+#         },
+#         {
+#           name                 = "public-api"
+#           service_type         = "http"
+#           protocol             = "HTTP"
+#           target_group_type    = "ip"
+#           port                 = "8081"
+#           deregistration_delay = 30
+#           health = {
+#             healthy_threshold   = 2
+#             unhealthy_threshold = 2
+#             interval            = 30
+#             timeout             = 29
+#             path                = "/"
+#             port                = "8081"
+#           },
+#         },
+#       ]
+#     }
+#   }
+# }
