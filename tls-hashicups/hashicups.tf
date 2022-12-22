@@ -16,13 +16,18 @@ locals {
   ]
 }
 
+resource "aws_cloudwatch_log_group" "log_group" {
+  name = var.name
+}
+
 module "acl_controller" {
   source     = "hashicorp/consul-ecs/aws//modules/acl-controller"
-  version = "0.5.2"
+  version    = "0.5.2"
+  depends_on = [aws_instance.consul]
   log_configuration = {
     logDriver = "awslogs"
     options = {
-      awslogs-group         = var.aws_logs_group #aws_cloudwatch_log_group.log_group.name
+      awslogs-group         = aws_cloudwatch_log_group.log_group.name
       awslogs-region        = var.region
       awslogs-stream-prefix = "consul-acl-controller"
     }
@@ -34,15 +39,15 @@ module "acl_controller" {
   region                            = var.region
   subnets                           = module.vpc.private_subnets
   name_prefix                       = var.name
-  
-
 }
+
 
 module "hashicups-tasks" {
   for_each = { for service in var.hashicups_settings : service.name => service }
   source            = "hashicorp/consul-ecs/aws//modules/mesh-task"
   version           = "0.5.2"
-
+  consul_image = "public.ecr.aws/hashicorp/consul:1.14.2"
+  envoy_image = "envoyproxy/envoy-alpine:v1.21.4"
   family = each.value.name
   port   = each.value.portMappings[0].hostPort #9090
   log_configuration = {
