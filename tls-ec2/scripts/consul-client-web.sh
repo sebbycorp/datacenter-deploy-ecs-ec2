@@ -2,9 +2,23 @@
 
 #Utils
 sudo apt-get install unzip
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo apt-get update
+sudo apt-get jq
+
 
 #Download Consul
 curl --silent --remote-name https://releases.hashicorp.com/consul/${consul_version}/consul_${consul_version}_linux_amd64.zip
+
+
+
+#Install Dockers
+sudo snap install docker
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
 
 #Install Consul
 unzip consul_${consul_version}_linux_amd64.zip
@@ -16,7 +30,7 @@ complete -C /usr/local/bin/consul consul
 
 #install Envoy
 curl https://func-e.io/install.sh | bash -s -- -b /usr/local/bin
-func-e use 1.23.1
+sudofunc-e use 1.23.1
 cp /root/.func-e/versions/1.23.1/bin/envoy /usr/local/bin
 
 
@@ -98,7 +112,9 @@ auto_encrypt {
   tls = true
 }
 ports {
-  grps_tls = 8503
+  http = 8500
+  https = 8501
+
 }
 
 EOF

@@ -6,6 +6,7 @@ sudo apt-get install unzip
 #Download Consul
 curl --silent --remote-name https://releases.hashicorp.com/consul/${consul_version}/consul_${consul_version}_linux_amd64.zip
 
+
 #Install Consul
 unzip consul_${consul_version}_linux_amd64.zip
 sudo chown root:root consul
@@ -98,9 +99,10 @@ auto_encrypt {
   tls = true
 }
 ports {
-  grps_tls = 8503
+  http = 8500
+  https = 8501
 }
-EOF
+EOF 
 
 #Enable the service
 sudo systemctl enable consul
