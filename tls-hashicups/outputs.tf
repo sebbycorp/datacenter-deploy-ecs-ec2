@@ -1,9 +1,7 @@
 output "client_lb_address" {
   value = "http://${aws_lb.example_client_app.dns_name}:9090/ui"
 }
-output "faragate_lb_address" {
-  value = "http://${aws_lb.fargate_client_app.dns_name}:9090/ui"
-}
+
 output "Consul_ui_address" {
   value = "http://${aws_eip.consul.public_ip}:8500"
 }
@@ -14,8 +12,4 @@ output "Consul_LB_address" {
 
 output "acl_bootstrap_token" {
   value = random_uuid.bootstrap_token.result
-}
-
-output "client_lb_hashicups_address" {
-  value = "http://${aws_lb.hashicups.dns_name}/"
 }

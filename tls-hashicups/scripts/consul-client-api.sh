@@ -2,23 +2,9 @@
 
 #Utils
 sudo apt-get install unzip
-sudo apt-get update
-sudo apt-get install software-properties-common
-sudo add-apt-repository universe
-sudo apt-get update
-sudo apt-get jq
-
 
 #Download Consul
 curl --silent --remote-name https://releases.hashicorp.com/consul/${consul_version}/consul_${consul_version}_linux_amd64.zip
-
-
-
-#Install Dockers
-sudo snap install docker
-sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-
 
 #Install Consul
 unzip consul_${consul_version}_linux_amd64.zip
@@ -30,7 +16,7 @@ complete -C /usr/local/bin/consul consul
 
 #install Envoy
 curl https://func-e.io/install.sh | bash -s -- -b /usr/local/bin
-sudofunc-e use 1.23.1
+func-e use 1.23.1
 cp /root/.func-e/versions/1.23.1/bin/envoy /usr/local/bin
 
 
@@ -84,7 +70,7 @@ EOF
 
 #Create Consul config file
 cat << EOF > /etc/consul.d/server.hcl
-node_name = "ec2-server-web"
+node_name = "ec2-server-app"
 datacenter = "${consul_datacenter}"
 data_dir = "/opt/consul"
 client_addr = "0.0.0.0"
@@ -112,11 +98,8 @@ auto_encrypt {
   tls = true
 }
 ports {
-  http = 8500
-  https = 8501
-
+  grps_tls = 8503
 }
-
 EOF
 
 #Enable the service
@@ -133,40 +116,36 @@ mv fake-service /usr/local/bin
 chmod +x /usr/local/bin/fake-service
 
 # Fake Service Systemd Unit File
-cat > /etc/systemd/system/web.service <<- EOF
+cat > /etc/systemd/system/api.service <<- EOF
 [Unit]
-Description=WEB
+Description=API
 After=syslog.target network.target
-
 [Service]
-Environment="MESSAGE=Hello from Web"
-Environment="NAME=web"
-Environment="UPSTREAM_URIS=http://api.service.consul:9090"
+Environment="MESSAGE=api"
+Environment="NAME=api"
 ExecStart=/usr/local/bin/fake-service
 ExecStop=/bin/sleep 5
 Restart=always
-
 [Install]
 WantedBy=multi-user.target
 EOF
 
 # Reload unit files and start the API
 systemctl daemon-reload
-systemctl start web
+systemctl start api
 
-# Consul Conf/ig file for our fake API service
-cat > /etc/consul.d/web.hcl <<- EOF
+# Consul Config file for our fake API service
+cat > /etc/consul.d/api.hcl <<- EOF
 service {
-  name = "web"
+  name = "api"
   port = 9090
   token = "${consul_acl_token}"
   check {
-    id = "web"
-    name = "HTTP Web on Port 9090"
+    id = "api"
+    name = "HTTP API on Port 9090"
     http = "http://localhost:9090/health"
     interval = "30s"
   }
-
   connect {
     sidecar_service {
       port = 20000
@@ -175,13 +154,6 @@ service {
         tcp      = "127.0.0.1:20000"
         interval = "10s"
       }
-      proxy {
-        upstreams {
-          destination_name   = "api"
-          local_bind_address = "127.0.0.1"
-          local_bind_port    = 9091
-        }
-      }
     }
   }
 }
@@ -189,23 +161,23 @@ EOF
 
 systemctl restart consul
 
+
 cat > /etc/systemd/system/consul-envoy.service <<- EOF
 [Unit]
 Description=Consul Envoy
 After=syslog.target network.target
-
-# Put web service token here for the -token option!
+# Put api service token here for the -token option!
 [Service]
-ExecStart=/usr/bin/consul connect envoy -sidecar-for=web -token=${consul_acl_token}
+ExecStart=/usr/bin/consul connect envoy -sidecar-for=api -token=${consul_acl_token}
 ExecStop=/bin/sleep 5
 Restart=always
-
 [Install]
 WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
 systemctl start consul-envoy
+
 mkdir -p /etc/systemd/resolved.conf.d
 
 # Point DNS to Consul's DNS

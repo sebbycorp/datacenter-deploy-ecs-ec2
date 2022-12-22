@@ -5,6 +5,8 @@ module "fargate_client_app" {
   family            = "${var.name}-fargate-client-app"
   port              = "9090"
   log_configuration = local.fargate_client_app_log_config
+  # consul_image = "public.ecr.aws/hashicorp/consul:${var.consul_version}"
+  # envoy_image = "envoyproxy/envoy:v1.23.1"
   container_definitions = [{
     name             = "fargate-client-app"
     image            = "ghcr.io/lkysow/fake-service:v0.21.0"
@@ -55,6 +57,8 @@ module "fargate_server_app" {
   family            = "${var.name}-fargate-server-app"
   port              = "9090"
   log_configuration = local.fargate_server_app_log_config
+  # consul_image = "public.ecr.aws/hashicorp/consul:${var.consul_version}"
+  # envoy_image = "envoyproxy/envoy:v1.23.1"
   container_definitions = [{
     name             = "fargate-server-app"
     image            = "ghcr.io/lkysow/fake-service:v0.21.0"
