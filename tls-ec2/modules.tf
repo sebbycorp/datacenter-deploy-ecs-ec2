@@ -29,7 +29,7 @@ module "example_client_app" {
   port              = "9090"
   log_configuration = local.example_client_app_log_config
   consul_image = "public.ecr.aws/hashicorp/consul:1.14.2"
-  envoy_image = "public.ecr.aws/envoyproxy/envoy:1.23.1"
+  envoy_image = "envoyproxy/envoy:v1.23.1"
   container_definitions = [{
     name             = "example-client-app"
     image            = "ghcr.io/lkysow/fake-service:v0.21.0"
@@ -83,7 +83,7 @@ module "example_server_app" {
   port              = "9090"
   log_configuration = local.example_server_app_log_config
   consul_image = "public.ecr.aws/hashicorp/consul:1.14.2"
-  envoy_image = "public.ecr.aws/envoyproxy/envoy:1.23.1"
+  envoy_image = "envoyproxy/envoy:v1.23.1"
   container_definitions = [{
     name             = "example-server-app"
     image            = "ghcr.io/lkysow/fake-service:v0.21.0"
