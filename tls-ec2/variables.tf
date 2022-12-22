@@ -54,7 +54,7 @@ variable "secure" {
 variable "consul_version" {
   description = "Consul server version"
   type        = string
-  default     = "1.14.2"
+  default     = "1.14.3"
 }
 
 variable "consul_datacenter" {

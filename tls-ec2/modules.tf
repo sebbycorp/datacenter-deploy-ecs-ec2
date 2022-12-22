@@ -28,7 +28,7 @@ module "example_client_app" {
   memory                   = 256
   port              = "9090"
   log_configuration = local.example_client_app_log_config
-  consul_image = "public.ecr.aws/hashicorp/consul:1.14.2"
+  consul_image = "public.ecr.aws/hashicorp/consul:${var.consul_version}}"
   envoy_image = "envoyproxy/envoy:v1.23.1"
   container_definitions = [{
     name             = "example-client-app"
@@ -82,7 +82,7 @@ module "example_server_app" {
   memory                   = 256
   port              = "9090"
   log_configuration = local.example_server_app_log_config
-  consul_image = "public.ecr.aws/hashicorp/consul:1.14.2"
+  consul_image = "public.ecr.aws/hashicorp/consul:${var.consul_version}}"
   envoy_image = "envoyproxy/envoy:v1.23.1"
   container_definitions = [{
     name             = "example-server-app"
